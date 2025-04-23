@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Application.Interface;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistance.Context;
@@ -11,6 +12,7 @@ namespace Persistance
 			services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(
 				configuration.GetConnectionString("DefaultConnection")
 				));
+			services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 		}
 	}
 }
