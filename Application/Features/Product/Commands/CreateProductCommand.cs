@@ -1,10 +1,7 @@
 ﻿using Application.Interface;
+using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Features.Product.Commands
 {
@@ -15,18 +12,16 @@ namespace Application.Features.Product.Commands
 		internal class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,int>
 		{
 			private readonly IApplicationDbContext _context;
-			public CreateProductCommandHandler(IApplicationDbContext context)
+			private readonly IMapper _mapper;
+			public CreateProductCommandHandler(IApplicationDbContext context, IMapper mapper)
 			{
 				_context = context;
+				_mapper = mapper;
 			}
 			public async Task<int> Handle(CreateProductCommand request,CancellationToken cancellationToken)
 			{
-				var product = new Domain.Entities.Product
-				{
-					Name = request.Name,
-					Description = request.Description,
-					CreatedOn = DateTime.Now
-				};
+			    var product = _mapper.Map<Domain.Entities.Product>(request);
+				product.CreatedOn = DateTime.Now;
 				await _context.Products.AddAsync(product);
 				await _context.SaveChangesAsysnc();
 				return product.Id;
