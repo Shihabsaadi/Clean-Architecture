@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Application.Exceptions;
+using FluentValidation;
 using MediatR;
 
 namespace Application.Behaviours
@@ -19,7 +20,7 @@ namespace Application.Behaviours
 			  var failers = result.SelectMany(x => x.Errors).Where(_=>_!=null).ToList();
 				if(failers.Any())
 				{
-					throw new ValidationException(failers);
+					throw new ValidationErrorException(failers);
 				}
 			}
 			var response = await next();
