@@ -1,0 +1,24 @@
+﻿using Application.DTOs;
+using Application.Interface;
+using Microsoft.AspNetCore.Mvc;
+
+namespace WebApi.Controllers
+{
+	[Route("api/[controller]")]
+	[ApiController]
+	public class AccountController : ControllerBase
+	{
+		private readonly IAccountService _accountService;
+		public AccountController(IAccountService accountService)
+		{
+			_accountService = accountService;
+		}
+
+		[HttpPost("RegisterUser")]
+		public async Task<IActionResult> RegisterUser(RegisterRequest registerRequestModel,CancellationToken cancellationToken)
+		{
+			var result = await _accountService.RegisterUser(registerRequestModel);
+			return Ok(result);
+		}
+	}
+}
