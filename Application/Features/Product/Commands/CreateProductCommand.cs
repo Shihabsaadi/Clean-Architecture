@@ -14,14 +14,17 @@ namespace Application.Features.Product.Commands
 		{
 			private readonly IApplicationDbContext _context;
 			private readonly IMapper _mapper;
-			public CreateProductCommandHandler(IApplicationDbContext context, IMapper mapper)
+			private readonly IAuthenticatedUser _authenticatedUser;
+			public CreateProductCommandHandler(IApplicationDbContext context, IMapper mapper, IAuthenticatedUser authenticatedUser)
 			{
 				_context = context;
 				_mapper = mapper;
+				_authenticatedUser = authenticatedUser;
 			}
 			public async Task<ApiResponse<Domain.Entities.Product>> Handle(CreateProductCommand request,CancellationToken cancellationToken)
 			{
 			    var product = _mapper.Map<Domain.Entities.Product>(request);
+				product.CreatedBy = _authenticatedUser.UserId;
 				product.CreatedOn = DateTime.Now;
 				await _context.Products.AddAsync(product);
 				await _context.SaveChangesAsysnc();

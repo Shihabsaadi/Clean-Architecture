@@ -20,5 +20,11 @@ namespace WebApi.Controllers
 			var result = await _accountService.RegisterUser(registerRequestModel);
 			return Ok(result);
 		}
+		[HttpPost("Authentication")]
+		public async Task<IActionResult> AuthenticationUser(AuthenticationRequest authenticationRequest, CancellationToken cancellationToken)
+		{
+			var result =await _accountService.AuthenticationUser(authenticationRequest);
+			return Ok(result);
+		}
 	}
 }

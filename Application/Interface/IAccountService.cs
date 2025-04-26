@@ -11,5 +11,6 @@ namespace Application.Interface
 	public interface IAccountService
 	{
 		Task<ApiResponse<Guid>> RegisterUser(RegisterRequest registerRequest);
+		Task<ApiResponse<AuthenticationResponse>> AuthenticationUser(AuthenticationRequest authenticationRequest);
 	}
 }

@@ -16,8 +16,14 @@ namespace Application.Wrappers
         {
             
         }
-        //success
-        public ApiResponse(T data, string message)
+		public ApiResponse(T data)
+		{
+			Succecced = true;
+			Data = data;
+		}
+		//fa
+		//success
+		public ApiResponse(T data, string message)
         {
 			Succecced = true;
 			Message = message;
