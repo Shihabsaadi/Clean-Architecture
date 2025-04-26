@@ -18,11 +18,12 @@ namespace Persistance.SharedServices
 	{
         private readonly UserManager<ApplicationUser> _userManager;
 		private readonly IConfiguration _configuration;
-
-		public AccountService(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+		private readonly IEmailService _emailService;
+		public AccountService(UserManager<ApplicationUser> userManager, IConfiguration configuration, IEmailService emailService)
 		{
 			_userManager = userManager;
 			_configuration = configuration;
+			_emailService = emailService;
 		}
 
 		public async Task<ApiResponse<Guid>> RegisterUser(RegisterRequest registerRequest)
@@ -47,6 +48,13 @@ namespace Persistance.SharedServices
 			if (result.Succeeded)
 			{
 				await _userManager.AddToRoleAsync(userModel, Roles.Basic.ToString());
+				var emailRequest = new EmailRequest
+				{
+					To = userModel.Email,
+					Subject = $"Welcome {userModel.Email} to the clean architecture!",
+					Body = "User Registration Successful!"
+				};
+				await _emailService.SendAsync(emailRequest);
 				return new ApiResponse<Guid>(userModel.Id, "User Registered Successfully!");
 			}
 			else { throw new ApiException(result.Errors.ToString()); }
